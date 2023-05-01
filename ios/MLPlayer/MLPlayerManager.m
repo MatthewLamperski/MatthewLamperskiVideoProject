@@ -4,6 +4,8 @@
 //
 //  Created by Matthew Lamperski on 4/27/23.
 //
+//  Exposes the MLPlayer component to the JavaScript layer.
+//
 
 #import <React/RCTBridge.h>
 #import <React//RCTViewManager.h>

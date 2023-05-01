@@ -10,6 +10,8 @@ import {useMLPlayerControls} from '../../hooks/useMLPlayerControls';
 
 const MlPlayer = ({video}: MLPlayerProps) => {
   const isLandscape = useIsLandscape();
+
+  // Different styles to be applied when phone's orientation changes
   const videoContainerStyle = useMemo<ViewStyle>(() => {
     if (isLandscape) {
       return {
@@ -23,8 +25,11 @@ const MlPlayer = ({video}: MLPlayerProps) => {
       };
     }
   }, [isLandscape]);
+
   const {src, setSrc, seek, paused, muted, speed, onUpdateTime} =
     useMLPlayerControls();
+
+  // Detects if video is downloaded or not, and sets the src accordingly
   useEffect(() => {
     const path = `${RNFS.DocumentDirectoryPath}/${video.id}.mp4`;
     RNFS.exists(path)
@@ -52,6 +57,7 @@ const MlPlayer = ({video}: MLPlayerProps) => {
         });
       });
   }, [setSrc, video.id, video.url]);
+
   return (
     <View style={videoContainerStyle}>
       {src === null ? (

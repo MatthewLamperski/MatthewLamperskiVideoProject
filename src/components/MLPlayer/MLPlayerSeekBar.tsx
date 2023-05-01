@@ -18,14 +18,17 @@ import SoundOff from '../../../assets/SoundOff';
 import Download from '../../../assets/Download';
 import CheckMark from '../../../assets/CheckMark';
 import {useMLPlayerControls} from '../../hooks/useMLPlayerControls';
+import {theme} from '../../constants';
 import timing = Animated.timing;
 
+// Keeps track of downloading state
 const DOWNLOADING_STATE = {
   DOWNLOADING: 0,
   DOWNLOADED: 1,
   NOTDOWNLOADED: 2,
 };
 const MlPlayerSeekBar = () => {
+  const {colors} = theme;
   const {
     setSeek,
     currentTime,
@@ -41,6 +44,7 @@ const MlPlayerSeekBar = () => {
   } = useMLPlayerControls();
   let maxX = useRef(10);
 
+  // Animation values used for animating seek bar
   const thumbPanX = useRef(new Animated.Value(0)).current;
   const thumbScale = useRef(new Animated.Value(1)).current;
   const width = useRef(new Animated.Value(0)).current;
@@ -50,6 +54,8 @@ const MlPlayerSeekBar = () => {
     extrapolate: 'clamp',
   });
   const containerPadding = useRef(new Animated.Value(0)).current;
+
+  // Automatically animate in response to showing controls
   useEffect(() => {
     if (showControls) {
       timing(containerPadding, {
@@ -65,6 +71,8 @@ const MlPlayerSeekBar = () => {
       }).start();
     }
   }, [containerPadding, showControls]);
+
+  // Used to move the track along as the video is played
   useEffect(() => {
     const newPercent = (currentTime / duration) * 100;
     if (!seeking) {
@@ -78,6 +86,8 @@ const MlPlayerSeekBar = () => {
     }
   }, [currentTime, duration, seeking, width]);
   let prevLeft = useRef(0);
+
+  // Animate in response to seeking
   const _onPanResponderMove = useCallback(
     (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
       const activeTouches = evt.nativeEvent.changedTouches.length;
@@ -144,6 +154,7 @@ const MlPlayerSeekBar = () => {
     }),
   ).current;
 
+  // Shows/hides time / duration when seeking
   const timeOpacity = useRef(new Animated.Value(0)).current;
   const showTime = useCallback(() => {
     timing(timeOpacity, {
@@ -200,6 +211,7 @@ const MlPlayerSeekBar = () => {
     return `${speed}x`;
   }, [speed]);
 
+  // Manages downloading functionality
   const [downloadingState, setDownloadingState] = useState(
     DOWNLOADING_STATE.NOTDOWNLOADED,
   );
@@ -380,7 +392,7 @@ const MlPlayerSeekBar = () => {
                       outputRange: ['0%', '100%'],
                       extrapolate: 'clamp',
                     }),
-                    backgroundColor: 'red',
+                    backgroundColor: colors.brand.orange,
                     height: 20,
                   }}
                 />
@@ -415,13 +427,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     borderRadius: 100,
     overflow: 'hidden',
-  },
-  seekThumb: {
-    position: 'absolute',
-    height: 15,
-    aspectRatio: 1,
-    borderRadius: 15 / 2,
-    backgroundColor: 'red',
   },
 });
 export default MlPlayerSeekBar;

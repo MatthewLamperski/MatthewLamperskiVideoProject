@@ -4,6 +4,8 @@
 //
 //  Created by Matthew Lamperski on 4/27/23.
 //
+//
+//  Implements the MLPlayer component
 
 import Foundation
 import AVFoundation
@@ -18,11 +20,14 @@ class MLPlayer: UIView {
     set { playerLayer.player = newValue }
   }
   
+  // Holds current position of player (time elapsed since start of video, seconds)
   private var currentTime: Double = 0 {
     didSet {
       sendUpdateTime(time: currentTime, duration: self.duration)
     }
   }
+  
+  // Holds total duration of video (in seconds)
   private var duration: Double = 1 {
     didSet {
       sendUpdateTime(time: self.currentTime, duration: duration)
@@ -44,6 +49,7 @@ class MLPlayer: UIView {
     self.backgroundColor = .black
   }
   
+  // Called via RN to set the source of the video, either a file or a link
   @objc
   func setSrc(_ src:NSDictionary) {
     let type = src["type"] as! String
@@ -61,6 +67,7 @@ class MLPlayer: UIView {
     setupPlayerLayer(src: videoURL)
   }
   
+  // Pauses/plays player
   @objc
   func setPaused(_ paused:Bool) {
     print("setPaused Called with", paused)
@@ -71,16 +78,19 @@ class MLPlayer: UIView {
     }
   }
   
+  // Mutes/unmutes player
   @objc
   func setMuted(_ muted:Bool) {
     _player?.isMuted = muted
   }
   
+  // Manipulates player's playback speed
   @objc
   func setSpeed(_ speed:Double) {
     _player?.rate = Float(speed)
   }
   
+  // Exposed event emitter
   @objc var onUpdateTime: RCTDirectEventBlock?
   
   @objc func sendUpdateTime(time: Double, duration: Double) {
@@ -89,6 +99,7 @@ class MLPlayer: UIView {
     }
   }
   
+  // Adds observer to player every 0.5s to update position
   func addPeriodicTimeObserver() {
     let timeScale = CMTimeScale(NSEC_PER_SEC)
     let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
@@ -98,6 +109,7 @@ class MLPlayer: UIView {
     })
   }
   
+  // Seeks to specific time
   @objc
   func setSeek(_ seek: Double) {
     print("setSeekCalled")
@@ -111,6 +123,7 @@ class MLPlayer: UIView {
   
 }
 
+// Sets up player with URL (either file or link)
 private extension MLPlayer {
   func setupPlayerLayer(src: URL?) {
     

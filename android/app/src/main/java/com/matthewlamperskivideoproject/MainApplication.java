@@ -30,7 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             List<ReactPackage> packages = new PackageList(this).getPackages();
 //            packages.add(new RNFSPackage());
-            packages.add(new MLPlayerComponentPackage());
+            packages.add(new MLPlayerComponentPackage()); // Add new package
           return packages;
         }
 

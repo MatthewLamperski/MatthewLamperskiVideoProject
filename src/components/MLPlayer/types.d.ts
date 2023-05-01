@@ -14,6 +14,9 @@ export type VideoSource = {
   id: string;
 } | null;
 
+/**
+ * Context Value
+ */
 export type MLPlayerControls = {
   src: VideoSource;
   setSrc: Dispatch<SetStateAction<VideoSource>>;

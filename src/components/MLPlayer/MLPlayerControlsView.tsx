@@ -24,9 +24,16 @@ const MLPlayerControlsView = () => {
     setSeek,
     duration,
   } = useMLPlayerControls();
+
+  // Animation values for the controls and the blurred/unblurred screen itself
+  // Must be separate because when seeking while controls are invisible, screen should blur
   const controlsOpacity = useRef(new Animated.Value(0)).current;
   const screenOpacity = useRef(new Animated.Value(0)).current;
+
+  // Width of the seek bar (used for seeking behavior)
   let maxX = useRef(10);
+
+  // Hide controls
   const hide = useCallback(() => {
     Animated.timing(controlsOpacity, {
       toValue: 0,
@@ -35,6 +42,8 @@ const MLPlayerControlsView = () => {
     }).start();
     setShowControls(false);
   }, [controlsOpacity, setShowControls]);
+
+  // Show controls
   const show = useCallback(
     (autoHide: boolean) => {
       Animated.timing(controlsOpacity, {
@@ -51,6 +60,8 @@ const MLPlayerControlsView = () => {
     },
     [controlsOpacity, hide, setShowControls],
   );
+
+  // Blur (dim) screen without showing controls
   const blurScreen = useCallback(() => {
     Animated.timing(screenOpacity, {
       toValue: 1,
@@ -58,6 +69,8 @@ const MLPlayerControlsView = () => {
       useNativeDriver: true,
     }).start();
   }, [screenOpacity]);
+
+  // Unblur (undim) screen
   const unBlurScreen = useCallback(() => {
     Animated.timing(screenOpacity, {
       toValue: 0,
@@ -65,6 +78,8 @@ const MLPlayerControlsView = () => {
       useNativeDriver: true,
     }).start();
   }, [screenOpacity]);
+
+  // Will animate in response to whether user is seeking or tapped on player
   useEffect(() => {
     if (seeking || showControls) {
       blurScreen();
@@ -94,10 +109,12 @@ const MLPlayerControlsView = () => {
     setSeek(newSeek);
   }, [currentTime, setSeek, duration]);
 
+  // Toggle showControls
   const onPlayerPress = useCallback(() => {
     setShowControls((prevState: Boolean) => !prevState);
   }, [setShowControls]);
 
+  // Used for both pausing and playing
   const pause = useCallback(() => {
     setPaused(prevState => {
       if (prevState) {
@@ -107,6 +124,7 @@ const MLPlayerControlsView = () => {
     });
   }, [setPaused, hide]);
 
+  // Stores whether video has ended
   const ended = useMemo<boolean>(() => {
     if (currentTime / duration >= 1) {
       pause();
@@ -117,6 +135,7 @@ const MLPlayerControlsView = () => {
     }
   }, [currentTime, duration, pause, show]);
 
+  // Replay option given when video ends
   const replay = useCallback(() => {
     setSeek(-1);
   }, [setSeek]);
