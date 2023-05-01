@@ -1,9 +1,11 @@
 package com.matthewlamperskivideoproject;
-
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends ReactActivity {
 

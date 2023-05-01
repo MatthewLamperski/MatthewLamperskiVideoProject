@@ -40,6 +40,7 @@ const MLPlayerProvider = ({children}: {children: React.ReactNode}) => {
   const [seeking, setSeeking] = useState<boolean>(false);
 
   useOnAppBlur(() => {
+    console.log('pausing...');
     setPaused(true);
   });
   const onUpdateTime = useCallback((e: UpdateTimeEvent) => {

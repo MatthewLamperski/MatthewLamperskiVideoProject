@@ -100,7 +100,6 @@ const MLPlayerControlsView = () => {
 
   const pause = useCallback(() => {
     setPaused(prevState => {
-      console.log('prevPause', prevState);
       if (prevState) {
         setTimeout(hide, 1000);
       }
@@ -109,8 +108,7 @@ const MLPlayerControlsView = () => {
   }, [setPaused, hide]);
 
   const ended = useMemo<boolean>(() => {
-    if (currentTime / duration === 1) {
-      // display controls without fading
+    if (currentTime / duration >= 1) {
       pause();
       show(false);
       return true;

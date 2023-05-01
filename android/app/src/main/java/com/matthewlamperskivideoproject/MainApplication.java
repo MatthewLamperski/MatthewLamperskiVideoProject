@@ -1,13 +1,20 @@
 package com.matthewlamperskivideoproject;
 
 import android.app.Application;
+
+import com.facebook.react.BuildConfig;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
+import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.matthewlamperskivideoproject.mlplayer.MLPlayerComponentPackage;
+import com.rnfs.RNFSPackage;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -21,10 +28,9 @@ public class MainApplication extends Application implements ReactApplication {
 
         @Override
         protected List<ReactPackage> getPackages() {
-          @SuppressWarnings("UnnecessaryLocalVariable")
-          List<ReactPackage> packages = new PackageList(this).getPackages();
-          // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
+            List<ReactPackage> packages = new PackageList(this).getPackages();
+//            packages.add(new RNFSPackage());
+            packages.add(new MLPlayerComponentPackage());
           return packages;
         }
 
@@ -35,12 +41,12 @@ public class MainApplication extends Application implements ReactApplication {
 
         @Override
         protected boolean isNewArchEnabled() {
-          return BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+          return false;
         }
 
         @Override
         protected Boolean isHermesEnabled() {
-          return BuildConfig.IS_HERMES_ENABLED;
+          return true;
         }
       };
 
@@ -53,7 +59,7 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
-    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+    if (false) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.
       DefaultNewArchitectureEntryPoint.load();
     }

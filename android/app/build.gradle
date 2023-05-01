@@ -1,8 +1,8 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply plugin: 'kotlin-android'
 
 import com.android.build.OutputFile
-
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -91,14 +91,15 @@ def reactNativeArchitectures() {
 
 android {
     ndkVersion rootProject.ext.ndkVersion
+    compileSdk compileSdkVersion
 
-    compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "com.matthewlamperskivideoproject"
     defaultConfig {
         applicationId "com.matthewlamperskivideoproject"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        compileSdkVersion 33
         versionCode 1
         versionName "1.0"
     }
@@ -154,6 +155,17 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
+
+    implementation project(':react-native-fs')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // Dependencies for ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.18.6'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.18.6'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.18.6'
+    implementation 'com.google.android.exoplayer:exoplayer-hls:2.18.6'
+    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.6'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.6'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

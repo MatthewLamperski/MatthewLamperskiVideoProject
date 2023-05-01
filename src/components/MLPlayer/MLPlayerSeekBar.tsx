@@ -226,10 +226,12 @@ const MlPlayerSeekBar = () => {
       RNFS.downloadFile({
         fromUrl: src?.url ?? '',
         toFile: path,
-        begin: () => {
+        begin: res => {
+          console.log(res);
           setDownloadingState(DOWNLOADING_STATE.DOWNLOADING);
         },
         progress: res => {
+          console.log(res.bytesWritten / res.contentLength, res);
           setDownloadingProgress(res.bytesWritten / res.contentLength);
           if (res.bytesWritten / res.contentLength === 1) {
             setDownloadingState(DOWNLOADING_STATE.DOWNLOADED);
@@ -238,6 +240,7 @@ const MlPlayerSeekBar = () => {
       })
         .promise.then(value => {
           console.log('DOWNLOADED', value);
+          setDownloadingState(DOWNLOADING_STATE.DOWNLOADED);
         })
         .catch(err => console.error(err));
     } else if (downloadingState === DOWNLOADING_STATE.DOWNLOADED) {
